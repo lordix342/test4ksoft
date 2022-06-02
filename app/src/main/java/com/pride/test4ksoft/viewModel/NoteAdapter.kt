@@ -10,25 +10,21 @@ import com.pride.test4ksoft.databinding.NoteLayoutBinding
 import com.pride.test4ksoft.repository.NoteClass
 
 
-class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteHolder>() {
+class NoteAdapter(private val clickListener: ClickListener) :
+    RecyclerView.Adapter<NoteAdapter.NoteHolder>() {
 
     private var notes = ArrayList<NoteClass>()
-    var onItemClick: ((NoteClass) -> Unit)? = null
 
-    inner class NoteHolder(item: View) : RecyclerView.ViewHolder(item) {
+    class NoteHolder(item: View) : RecyclerView.ViewHolder(item) {
 
         private val binding = NoteLayoutBinding.bind(itemView)
-        fun bind(note: NoteClass) = with(binding) {
+        fun bind(note: NoteClass, clickListener: ClickListener) = with(binding) {
             texttitle.text = note.title
             textdescription.text = note.description
             textdate.text = note.date
-        }
-
-        init {
             binding.card.setOnClickListener {
-                onItemClick?.invoke(notes[adapterPosition])
+                clickListener.onClick(note)
             }
-
         }
     }
 
@@ -43,14 +39,13 @@ class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteHolder>() {
     }
 
     override fun onBindViewHolder(holder: NoteHolder, position: Int) {
-        val currentNote = notes[position]
-        holder.bind(currentNote)
+        holder.bind(notes[position], clickListener)
     }
 
     @SuppressLint("NotifyDataSetChanged")
     fun setData(noteslist: ArrayList<NoteClass>) {
         notes.clear()
-        notes = noteslist
+        notes.addAll(noteslist)
         notifyDataSetChanged()
     }
 

@@ -5,23 +5,22 @@ import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.Navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.pride.test4ksoft.R
 import com.pride.test4ksoft.databinding.FragmentListnoteBinding
 import com.pride.test4ksoft.repository.NoteClass
+import com.pride.test4ksoft.viewModel.ClickListener
 import com.pride.test4ksoft.viewModel.EditViewModel
 import com.pride.test4ksoft.viewModel.NoteAdapter
 import com.pride.test4ksoft.viewModel.ViewModel
 
 
-class Listnote : Fragment() {
+class Listnote : Fragment(), ClickListener {
 
     private lateinit var binding: FragmentListnoteBinding
-    private var adapter = NoteAdapter()
+    private var adapter = NoteAdapter(this)
     private val viewModel: ViewModel by activityViewModels()
     private val editViewModel: EditViewModel by activityViewModels()
 
@@ -52,9 +51,15 @@ class Listnote : Fragment() {
         menu.findItem(R.id.fab_create).isVisible = true
     }
 
+    override fun onClick(note: NoteClass) {
+        editViewModel.getEdit(note)
+        activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.place_holder, Edit())
+            ?.addToBackStack("")?.commit()
+    }
+
     private fun notelist() {
         viewModel.listNotesDb()
-        viewModel.noteList.observe(viewLifecycleOwner) {
+        viewModel.noteListForView.observe(viewLifecycleOwner) {
             viewModel.updateFirebase()
             adapter.setData(it)
             binding.rcView.adapter = adapter
@@ -62,9 +67,6 @@ class Listnote : Fragment() {
                 requireContext(),
                 RecyclerView.VERTICAL, false
             )
-            adapter.onItemClick = { notes ->
-                clickNote(notes)
-            }
             swipeNote()
         }
     }
@@ -88,9 +90,4 @@ class Listnote : Fragment() {
         myHelper.attachToRecyclerView(binding.rcView)
     }
 
-    private fun clickNote(note: NoteClass) {
-        editViewModel.getEdit(note)
-        activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.place_holder, Edit())
-            ?.addToBackStack("")?.commit()
-    }
 }

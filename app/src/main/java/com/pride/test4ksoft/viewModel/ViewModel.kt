@@ -2,7 +2,6 @@ package com.pride.test4ksoft.viewModel
 
 import android.app.Application
 import android.icu.text.SimpleDateFormat
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -16,7 +15,8 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
     private val dbManager = DbManager(application.applicationContext)
     private val database = FirebaseDatabase.getInstance().getReference("Notes")
 
-    var noteList: MutableLiveData<ArrayList<NoteClass>> = MutableLiveData() // список заміток
+    private var noteList: MutableLiveData<ArrayList<NoteClass>> = MutableLiveData() // список заміток
+    var noteListForView: MutableLiveData<ArrayList<NoteClass>> = MutableLiveData() // список заміток
 
     fun updateFirebase() {
         viewModelScope.launch {
@@ -29,6 +29,7 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             dbManager.openDb()
             noteList.value = dbManager.sortDb()
+            noteListForView.value = noteList.value
             dbManager.closeDb()
         }
     }
@@ -38,10 +39,10 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
             dbManager.openDb()
             dbManager.deleteNote(noteList.value?.get(position)?.id)
             noteList.value = dbManager.sortDb()
+            noteListForView.value = noteList.value
             dbManager.closeDb()
         }
     }
-
 
     fun insertNewNote() {
         val date = Calendar.getInstance()
@@ -51,6 +52,7 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
             dbManager.openDb()
             dbManager.insert("Нова замітка", "", formating.format(date.time).toString())
             noteList.value = dbManager.sortDb()
+            noteListForView.value = noteList.value
             dbManager.closeDb()
         }
     }

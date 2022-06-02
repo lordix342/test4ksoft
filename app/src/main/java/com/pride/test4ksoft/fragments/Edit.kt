@@ -34,7 +34,7 @@ class Edit : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        editViewModel.noteEdit.observe(viewLifecycleOwner) { note ->
+        editViewModel.noteEditForView.observe(viewLifecycleOwner) { note ->
             if (note != null) {
                 editNote = note
                 binding.edtitle.setText(note.title)

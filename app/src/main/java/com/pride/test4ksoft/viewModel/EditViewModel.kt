@@ -12,12 +12,15 @@ import java.util.*
 
 class EditViewModel(application: Application) : AndroidViewModel(application) {
     private val dbManager = DbManager(application.applicationContext)
-    var noteEdit: MutableLiveData<NoteClass> =
+    private var noteEdit: MutableLiveData<NoteClass> = MutableLiveData()
+
+    var noteEditForView: MutableLiveData<NoteClass> =
         MutableLiveData()            // передача запису для редагування
 
     fun getEdit(note: NoteClass) {
         viewModelScope.launch {
             noteEdit.value = note
+            noteEditForView.value = noteEdit.value
         }
     }
 
