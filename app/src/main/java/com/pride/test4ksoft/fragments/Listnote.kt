@@ -5,6 +5,8 @@ import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,7 +26,7 @@ class Listnote : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        (activity as? AppCompatActivity)?.supportActionBar?.title = "Notes"
+        (activity as? AppCompatActivity)?.supportActionBar?.title = resources.getString(R.string.main_toolbar_name)
         (activity as? AppCompatActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
     }
 
@@ -78,7 +80,6 @@ class Listnote : Fragment() {
 
     private fun clickNote(note: NoteClass) {
         viewModel.getEdit(note)
-        activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.list_holder, Edit())
-            ?.addToBackStack("key1")?.commit()
+        findNavController().navigate(R.id.action_listnote_to_edit)
     }
 }

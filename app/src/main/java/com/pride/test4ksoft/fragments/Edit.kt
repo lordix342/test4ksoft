@@ -5,6 +5,7 @@ import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.pride.test4ksoft.R
 import com.pride.test4ksoft.databinding.FragmentEditBinding
 import com.pride.test4ksoft.repository.DbManager
@@ -15,7 +16,6 @@ import com.pride.test4ksoft.viewModel.ViewModel
 class Edit : Fragment() {
 
     private lateinit var binding: FragmentEditBinding
-    private lateinit var dbManager: DbManager
     private val viewModel: ViewModel by activityViewModels()
     private var noteForEdit = NoteClass("", "", "", "")
 
@@ -33,8 +33,6 @@ class Edit : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        dbManager = DbManager(requireContext())
-        dbManager.openDb()
         viewModel.noteEdit.observe(viewLifecycleOwner) { note ->
             if (note != null) {
                 noteForEdit = note
@@ -55,7 +53,7 @@ class Edit : Fragment() {
                 update()
             }
             16908332 -> { //backStack
-                activity?.onBackPressed()
+                findNavController().navigate(R.id.action_edit_to_listnote)
             }
         }
         return super.onOptionsItemSelected(item)
@@ -63,7 +61,6 @@ class Edit : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        dbManager.closeDb()
         (activity as? AppCompatActivity)?.supportActionBar?.title = "Notes"
         (activity as? AppCompatActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
     }
@@ -72,14 +69,12 @@ class Edit : Fragment() {
         val newTitle = binding.edtitle.text.toString()
         val newDescription = binding.editTextTextMultiLine.text.toString()
         if ((newTitle == noteForEdit.title) && (newDescription == noteForEdit.description)) {
-            activity?.onBackPressed()
+            findNavController().navigate(R.id.action_edit_to_listnote)
         } else {
             noteForEdit.title = newTitle
             noteForEdit.description = newDescription
             viewModel.updateNote(noteForEdit)
-            activity?.supportFragmentManager?.beginTransaction()
-                ?.replace(R.id.place_edit, Listnote())?.commit()
-            activity?.onBackPressed()
+            findNavController().navigate(R.id.action_edit_to_listnote)
         }
     }
 }

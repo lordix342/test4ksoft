@@ -18,7 +18,7 @@
     </fragment>
     <fragment
         android:id="@+id/edit"
-        android:name="com.pride.test4ksoft.fragments.edit"
+        android:name="com.pride.test4ksoft.fragments.Edit"
         android:label="edit" >
         <action
             android:id="@+id/action_edit_to_listnote"
