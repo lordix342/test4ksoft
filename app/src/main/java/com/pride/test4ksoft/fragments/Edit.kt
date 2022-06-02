@@ -8,8 +8,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.pride.test4ksoft.R
 import com.pride.test4ksoft.databinding.FragmentEditBinding
-import com.pride.test4ksoft.repository.DbManager
 import com.pride.test4ksoft.repository.NoteClass
+import com.pride.test4ksoft.viewModel.EditViewModel
 import com.pride.test4ksoft.viewModel.ViewModel
 
 
@@ -17,7 +17,8 @@ class Edit : Fragment() {
 
     private lateinit var binding: FragmentEditBinding
     private val viewModel: ViewModel by activityViewModels()
-    private var noteForEdit = NoteClass("", "", "", "")
+    private val editViewModel: EditViewModel by activityViewModels()
+    private lateinit var editNote : NoteClass
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,7 +26,7 @@ class Edit : Fragment() {
     ): View {
         //для змін тулбар
         setHasOptionsMenu(true)
-        (activity as? AppCompatActivity)?.supportActionBar?.title = "Editing"
+        (activity as? AppCompatActivity)?.supportActionBar?.title = resources.getString(R.string.edit_toolbar_name)
         (activity as? AppCompatActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         binding = FragmentEditBinding.inflate(inflater)
@@ -33,9 +34,9 @@ class Edit : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewModel.noteEdit.observe(viewLifecycleOwner) { note ->
+        editViewModel.noteEdit.observe(viewLifecycleOwner) { note ->
             if (note != null) {
-                noteForEdit = note
+                editNote = note
                 binding.edtitle.setText(note.title)
                 binding.editTextTextMultiLine.setText(note.description)
             }
@@ -53,7 +54,7 @@ class Edit : Fragment() {
                 update()
             }
             16908332 -> { //backStack
-                findNavController().navigate(R.id.action_edit_to_listnote)
+                activity?.onBackPressed()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -61,20 +62,15 @@ class Edit : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        (activity as? AppCompatActivity)?.supportActionBar?.title = "Notes"
+        (activity as? AppCompatActivity)?.supportActionBar?.title = resources.getString(R.string.main_toolbar_name)
         (activity as? AppCompatActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
     }
 
     private fun update() {
         val newTitle = binding.edtitle.text.toString()
         val newDescription = binding.editTextTextMultiLine.text.toString()
-        if ((newTitle == noteForEdit.title) && (newDescription == noteForEdit.description)) {
-            findNavController().navigate(R.id.action_edit_to_listnote)
-        } else {
-            noteForEdit.title = newTitle
-            noteForEdit.description = newDescription
-            viewModel.updateNote(noteForEdit)
-            findNavController().navigate(R.id.action_edit_to_listnote)
-        }
+        editViewModel.chekForUpdate(newTitle,newDescription,editNote)
+        activity?.onBackPressed()
+
     }
 }

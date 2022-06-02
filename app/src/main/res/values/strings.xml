@@ -2,4 +2,6 @@
     <string name="app_name">test4ksoft</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="main_toolbar_name">Notes</string>
+    <string name="edit_toolbar_name">Notes</string>
+    <string name="new_title">Нова замітка</string>
 </resources>

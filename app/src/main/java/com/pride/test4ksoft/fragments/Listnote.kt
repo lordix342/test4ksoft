@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.pride.test4ksoft.R
 import com.pride.test4ksoft.databinding.FragmentListnoteBinding
 import com.pride.test4ksoft.repository.NoteClass
+import com.pride.test4ksoft.viewModel.EditViewModel
 import com.pride.test4ksoft.viewModel.NoteAdapter
 import com.pride.test4ksoft.viewModel.ViewModel
 
@@ -22,6 +23,7 @@ class Listnote : Fragment() {
     private lateinit var binding: FragmentListnoteBinding
     private var adapter = NoteAdapter()
     private val viewModel: ViewModel by activityViewModels()
+    private val editViewModel: EditViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,36 +37,8 @@ class Listnote : Fragment() {
         savedInstanceState: Bundle?,
     ): View {
         binding = FragmentListnoteBinding.inflate(inflater)
+        notelist()
 
-        viewModel.listNotesDb()
-        viewModel.noteList.observe(viewLifecycleOwner) {
-            viewModel.updateFirebase()
-            adapter.setData(it)
-            binding.rcView.adapter = adapter
-            binding.rcView.layoutManager = LinearLayoutManager(
-                requireContext(),
-                RecyclerView.VERTICAL, false
-            )
-            adapter.onItemClick = { notes ->
-                clickNote(notes)
-            }
-            val myCallback = object : ItemTouchHelper.SimpleCallback(
-                0,
-                ItemTouchHelper.RIGHT
-            ) {
-                override fun onMove(
-                    recyclerView: RecyclerView,
-                    viewHolder: RecyclerView.ViewHolder,
-                    target: RecyclerView.ViewHolder
-                ): Boolean = false
-
-                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                    viewModel.deleteNote(viewHolder.adapterPosition)
-                }
-            }
-            val myHelper = ItemTouchHelper(myCallback)
-            myHelper.attachToRecyclerView(binding.rcView)
-        }
 
         return binding.root
     }
@@ -78,8 +52,45 @@ class Listnote : Fragment() {
         menu.findItem(R.id.fab_create).isVisible = true
     }
 
+    private fun notelist() {
+        viewModel.listNotesDb()
+        viewModel.noteList.observe(viewLifecycleOwner) {
+            viewModel.updateFirebase()
+            adapter.setData(it)
+            binding.rcView.adapter = adapter
+            binding.rcView.layoutManager = LinearLayoutManager(
+                requireContext(),
+                RecyclerView.VERTICAL, false
+            )
+            adapter.onItemClick = { notes ->
+                clickNote(notes)
+            }
+            swipeNote()
+        }
+    }
+
+    private fun swipeNote() {
+        val myCallback = object : ItemTouchHelper.SimpleCallback(
+            0,
+            ItemTouchHelper.RIGHT
+        ) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean = false
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                viewModel.deleteNote(viewHolder.adapterPosition)
+            }
+        }
+        val myHelper = ItemTouchHelper(myCallback)
+        myHelper.attachToRecyclerView(binding.rcView)
+    }
+
     private fun clickNote(note: NoteClass) {
-        viewModel.getEdit(note)
-        findNavController().navigate(R.id.action_listnote_to_edit)
+        editViewModel.getEdit(note)
+        activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.place_holder, Edit())
+            ?.addToBackStack("")?.commit()
     }
 }
