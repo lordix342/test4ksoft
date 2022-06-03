@@ -5,18 +5,16 @@ import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.Navigation
 import com.pride.test4ksoft.R
 import com.pride.test4ksoft.databinding.FragmentEditBinding
 import com.pride.test4ksoft.repository.NoteClass
 import com.pride.test4ksoft.viewModel.EditViewModel
-import com.pride.test4ksoft.viewModel.ViewModel
 
 
 class Edit : Fragment() {
 
     private lateinit var binding: FragmentEditBinding
-    private val viewModel: ViewModel by activityViewModels()
     private val editViewModel: EditViewModel by activityViewModels()
     private lateinit var editNote : NoteClass
 
@@ -54,7 +52,7 @@ class Edit : Fragment() {
                 update()
             }
             16908332 -> { //backStack
-                activity?.onBackPressed()
+                Navigation.findNavController(binding.root).popBackStack()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -70,7 +68,7 @@ class Edit : Fragment() {
         val newTitle = binding.edtitle.text.toString()
         val newDescription = binding.editTextTextMultiLine.text.toString()
         editViewModel.chekForUpdate(newTitle,newDescription,editNote)
-        activity?.onBackPressed()
+        Navigation.findNavController(binding.root).popBackStack()
 
     }
 }

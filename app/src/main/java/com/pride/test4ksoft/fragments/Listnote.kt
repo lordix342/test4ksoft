@@ -5,6 +5,7 @@ import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -53,8 +54,7 @@ class Listnote : Fragment(), ClickListener {
 
     override fun onClick(note: NoteClass) {
         editViewModel.getEdit(note)
-        activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.place_holder, Edit())
-            ?.addToBackStack("")?.commit()
+        Navigation.findNavController(binding.root).navigate(R.id.action_listnote_to_edit)
     }
 
     private fun notelist() {
