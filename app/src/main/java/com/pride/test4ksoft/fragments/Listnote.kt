@@ -25,10 +25,12 @@ class Listnote : Fragment(), ClickListener {
     private val viewModel: ViewModel by activityViewModels()
     private val editViewModel: EditViewModel by activityViewModels()
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        (activity as? AppCompatActivity)?.supportActionBar?.title = resources.getString(R.string.main_toolbar_name)
+        (activity as? AppCompatActivity)?.supportActionBar?.title =
+            resources.getString(R.string.main_toolbar_name)
         (activity as? AppCompatActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
     }
 
@@ -38,10 +40,9 @@ class Listnote : Fragment(), ClickListener {
     ): View {
         binding = FragmentListnoteBinding.inflate(inflater)
         notelist()
-
-
         return binding.root
     }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.fab_create) viewModel.insertNewNote()
         return super.onOptionsItemSelected(item)
@@ -89,5 +90,4 @@ class Listnote : Fragment(), ClickListener {
         val myHelper = ItemTouchHelper(myCallback)
         myHelper.attachToRecyclerView(binding.rcView)
     }
-
 }

@@ -14,8 +14,9 @@ import java.util.*
 class ViewModel(application: Application) : AndroidViewModel(application) {
     private val dbManager = DbManager(application.applicationContext)
     private val database = FirebaseDatabase.getInstance().getReference("Notes")
+    private var noteList: MutableLiveData<ArrayList<NoteClass>> =
+        MutableLiveData()
 
-    private var noteList: MutableLiveData<ArrayList<NoteClass>> = MutableLiveData() // список заміток
     var noteListForView: MutableLiveData<ArrayList<NoteClass>> = MutableLiveData() // список заміток
 
     fun updateFirebase() {

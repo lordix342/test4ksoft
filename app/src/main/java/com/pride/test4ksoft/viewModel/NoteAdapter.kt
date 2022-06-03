@@ -48,5 +48,4 @@ class NoteAdapter(private val clickListener: ClickListener) :
         notes.addAll(noteslist)
         notifyDataSetChanged()
     }
-
 }

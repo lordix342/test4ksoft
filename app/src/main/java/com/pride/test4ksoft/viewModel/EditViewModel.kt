@@ -15,7 +15,7 @@ class EditViewModel(application: Application) : AndroidViewModel(application) {
     private var noteEdit: MutableLiveData<NoteClass> = MutableLiveData()
 
     var noteEditForView: MutableLiveData<NoteClass> =
-        MutableLiveData()            // передача запису для редагування
+        MutableLiveData()
 
     fun getEdit(note: NoteClass) {
         viewModelScope.launch {
@@ -27,7 +27,7 @@ class EditViewModel(application: Application) : AndroidViewModel(application) {
     fun chekForUpdate(title: String, description: String, chekingNote: NoteClass) {
         val date = Calendar.getInstance()
         val formating = SimpleDateFormat("yyyy-MM-dd HH:mm")
-        if ((title != chekingNote.title)||(description != chekingNote.description)) {
+        if ((title != chekingNote.title) || (description != chekingNote.description)) {
             viewModelScope.launch {
                 dbManager.openDb()
                 dbManager.deleteNote(chekingNote.id)

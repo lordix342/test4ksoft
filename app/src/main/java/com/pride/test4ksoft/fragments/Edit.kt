@@ -16,15 +16,16 @@ class Edit : Fragment() {
 
     private lateinit var binding: FragmentEditBinding
     private val editViewModel: EditViewModel by activityViewModels()
-    private lateinit var editNote : NoteClass
+    private lateinit var editNote: NoteClass
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        //для змін тулбар
+
         setHasOptionsMenu(true)
-        (activity as? AppCompatActivity)?.supportActionBar?.title = resources.getString(R.string.edit_toolbar_name)
+        (activity as? AppCompatActivity)?.supportActionBar?.title =
+            resources.getString(R.string.edit_toolbar_name)
         (activity as? AppCompatActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         binding = FragmentEditBinding.inflate(inflater)
@@ -60,14 +61,15 @@ class Edit : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        (activity as? AppCompatActivity)?.supportActionBar?.title = resources.getString(R.string.main_toolbar_name)
+        (activity as? AppCompatActivity)?.supportActionBar?.title =
+            resources.getString(R.string.main_toolbar_name)
         (activity as? AppCompatActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
     }
 
     private fun update() {
         val newTitle = binding.edtitle.text.toString()
         val newDescription = binding.editTextTextMultiLine.text.toString()
-        editViewModel.chekForUpdate(newTitle,newDescription,editNote)
+        editViewModel.chekForUpdate(newTitle, newDescription, editNote)
         Navigation.findNavController(binding.root).popBackStack()
 
     }
