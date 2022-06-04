@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/place_edit"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FBF1CD">
@@ -20,8 +19,9 @@
             android:layout_margin="10dp"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="Name"
-            tools:ignore="TouchTargetSizeCheck" />
+            tools:ignore="TouchTargetSizeCheck"
+            android:autofillHints=""
+            android:hint="@string/new_title"/>
 
         <EditText
             android:id="@+id/editTextTextMultiLine"
@@ -31,7 +31,8 @@
             android:ems="10"
             android:gravity="start|top"
             android:inputType="textMultiLine"
-            tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
+            tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck"
+            android:autofillHints="" />
     </LinearLayout>
 
 </FrameLayout>

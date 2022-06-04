@@ -15,19 +15,18 @@ import com.pride.test4ksoft.viewModel.EditViewModel
 class Edit : Fragment() {
 
     private lateinit var binding: FragmentEditBinding
-    private val editViewModel: EditViewModel by activityViewModels()
     private lateinit var editNote: NoteClass
+    private val editViewModel: EditViewModel by activityViewModels()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-
         setHasOptionsMenu(true)
         (activity as? AppCompatActivity)?.supportActionBar?.title =
             resources.getString(R.string.edit_toolbar_name)
         (activity as? AppCompatActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
         binding = FragmentEditBinding.inflate(inflater)
         return binding.root
     }
@@ -71,6 +70,5 @@ class Edit : Fragment() {
         val newDescription = binding.editTextTextMultiLine.text.toString()
         editViewModel.chekForUpdate(newTitle, newDescription, editNote)
         Navigation.findNavController(binding.root).popBackStack()
-
     }
 }

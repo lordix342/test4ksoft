@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/test_nav"
+    android:id="@+id/nav_graph"
     app:startDestination="@id/listnote">
 
     <fragment
@@ -12,20 +12,10 @@
         tools:layout="@layout/fragment_listnote" >
         <action
             android:id="@+id/action_listnote_to_edit"
-            app:destination="@id/edit"
-            app:enterAnim="@android:anim/overshoot_interpolator"
-            app:exitAnim="@android:anim/overshoot_interpolator" />
+            app:destination="@id/edit" />
     </fragment>
     <fragment
         android:id="@+id/edit"
         android:name="com.pride.test4ksoft.fragments.Edit"
-        android:label="edit" >
-        <action
-            android:id="@+id/action_edit_to_listnote"
-            app:destination="@id/listnote"
-            app:enterAnim="@android:anim/overshoot_interpolator"
-            app:exitAnim="@android:anim/overshoot_interpolator"
-            app:popUpTo="@id/listnote"
-            app:popUpToInclusive="true" />
-    </fragment>
+        android:label="Edit" />
 </navigation>
